@@ -139,6 +139,7 @@ header a:hover{
 /*boxes */
 #boxes{
 	margin-top:20px;
+	color: #C5B358;
 }
 
 #boxes .box{
@@ -156,13 +157,13 @@ header a:hover{
 footer{
 	padding:20px;
 	margin-top:20px;
-	color:#ffffff;
+	color:#000000;
 	background-color:#C5B358;
 	text-align:center;
 }
 
 .main {
-	background-color:#e5e4d7;
+	background-color:#000000;
 	margin-left:10px;
 	margin-right:320px;
 	margin-top: 10px;
@@ -195,7 +196,7 @@ footer{
 }
 
 body .highlight, body .current a{
-	color:#e8491d;
+	color:#C5B358;
 	font-weight: bold;
 }
 body a:hover{
@@ -204,12 +205,12 @@ body a:hover{
 }
 
 	
- .current a{
-	color:#e8491d;
+.current a{
+	color:#C5B358;
 	font-weight: bold;
 }
 
 .main h2 {
 	font-size: 120%;
-	color: #ce282e;
+	color: #C5B358;
 }
