@@ -140,19 +140,19 @@ header a:hover{
 
 /*boxes */
 #boxes{
-	margin-top:20px;
+	margin-top:10px;
 	color: #C5B358;
 }
 
 #boxes .box{
 	float:left;
 	text-align:center;
-	width:27%;
+	width:25%;
 	padding:3%;
 }
 
 #boxes .box img{
-	height:100px;
+	height:150px;
 	width: 100%;
 }
 
