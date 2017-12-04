@@ -14,11 +14,12 @@ def haters():  #exits the game
     print ("Lame, bye then!")
 
 def opened():
+    print('Great !')
     #Enter your code here
 def not_opened():
+    print("you live!")
     #Enter your code here
 x = greeting()
-
 if x=="yes":
     y = second_choice()
     if y=="yes":
