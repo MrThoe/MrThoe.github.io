@@ -6,7 +6,9 @@ body {
 	margin: 0;
 	background-color: #000000;
 	list-style: none;
-
+body h1{
+	color: #C5B358;
+}
 	}
 
 .container{
