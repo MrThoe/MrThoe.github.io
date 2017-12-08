@@ -198,6 +198,18 @@ footer{
 	list-style: none;
 
 }
+.element {
+	text-shadow:
+		-1px -1px 0 #ffffff,
+		1px -1px 0 #ffffff,
+		-1px 1px 0 #ffffff,
+		1px 1px 0 #ffffff;
+	color:#C5B358;
+	font-weight: bold;
+}
+
+
+
 
 body .highlight, body .current a{
 	color:#C5B358;
