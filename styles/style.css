@@ -147,6 +147,16 @@ header a:hover{
 	color: #C5B358;
 }
 
+.sideright a:hover{
+	color:#C5B358;
+	font-weight:bold;
+}
+.sideright h1:hover{
+	color:#ffffff;
+	font-weight:bold;
+}
+
+
 .box{
 	float:left;
 	text-align:center;
