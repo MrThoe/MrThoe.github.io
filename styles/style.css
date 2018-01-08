@@ -246,3 +246,7 @@ body a:hover{
 	font-size: 120%;
 	color: #C5B358;
 }
+
+footer h1 {
+	color: 000;
+}
