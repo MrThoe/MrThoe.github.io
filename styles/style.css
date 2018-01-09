@@ -80,7 +80,7 @@ header a:hover{
 /*showcase */
 #showcase{
 	min-height:200px;
-	background:url("/cvhs.jpg") no-repeat;
+	background:url("../img/marsh.jpg") no-repeat;
 	background-position:center;
 	text-align:center;
 	color:#ffffff;
