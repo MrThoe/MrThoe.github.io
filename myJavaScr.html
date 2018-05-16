@@ -1,0 +1,102 @@
+var r = 255;
+var g = 255;
+var b = 255;
+
+background(32, 198, 224);
+ 
+var plant = function(setx, sety, w, h){
+  fill(0,55,0);
+  ellipse(setx,sety, w, h);
+};
+
+var drawFish = function(centerX, centerY, bodyLength, bodyHeight, bodyColor){
+noStroke();
+fill(bodyColor);
+
+// body
+ellipse(centerX, centerY, bodyLength, bodyHeight);
+// tail
+var tailWidth = bodyLength/4;
+var tailHeight = bodyHeight/2;
+triangle(centerX-bodyLength/2, centerY,
+         centerX-bodyLength/2-tailWidth, centerY-tailHeight,
+         centerX-bodyLength/2-tailWidth, centerY+tailHeight);
+// eye
+fill(8, 8, 8);
+ellipse(centerX+bodyLength/4, centerY, bodyHeight/5, bodyHeight/5);
+centerX =+ 1;
+};
+
+var drawFishBack = function(centerX, centerY, bodyLength, bodyHeight, bodyColor){
+noStroke();
+fill(bodyColor);
+// body
+ellipse(centerX, centerY, bodyLength, bodyHeight);
+// tail
+var tailWidth = bodyLength/4;
+var tailHeight = bodyHeight/2;
+triangle(centerX+bodyLength/2, centerY,
+         centerX+bodyLength/2+tailWidth, centerY+tailHeight,
+         centerX+bodyLength/2+tailWidth, centerY-tailHeight);
+// eye
+fill(33, 33, 33);
+ellipse(centerX-bodyLength/4, centerY, bodyHeight/5, bodyHeight/5);
+};
+var a = 0;
+var x = 0;
+var y = 0;
+var h = 100;
+var h2 = 77;
+var size2 =0;
+var w = 100;
+var X = 200;
+var Y = 100;
+var speed = 0;
+
+draw = function(){
+background(31, 198, 217);     
+plant(18, 400,10, 300);
+plant(39, 400,6, 219);
+plant(56, 400,10, 469);
+plant(76, 438,22, 276);
+plant(113, 400,10, 300);
+plant(133, 400,10, 378);
+if (x < 400){
+    drawFish(X, Y, 62, 28, color(256, 54, 215));}
+    drawFishBack(857-2*X, Y+200, 35, 66, color(214, 217, 32));
+    drawFish(x, y, 2*h, w, color(56, 217, 182));
+    drawFish(x, y+100 + speed, h, w, color(102, 56, 217));
+    drawFishBack(641-X, 275-Y, h2, 38, color(173, 72, 5));
+if (x >399){
+    drawFish(X, Y, 69, 28, color(256, 54, 215));
+    drawFishBack(800 - x, 800 - y, 2*h, w, color(56, 217, 182));
+    drawFishBack(641-X, 275-Y, h2, 38, color(173, 72, 5));
+}
+if (x > 900){
+    x = -300;
+    y = -100;
+}
+if (x%2 === 0){
+    X +=1;
+    y +=1;
+}
+if (h2 < 65){
+    size2 = 1;}
+if (h2 > 75){
+    size2 = 0;
+}
+if (h2 > 80){
+    size2 =0;}
+if (size2 ===1){
+    h2 +=1;
+}
+if (size2 ===0){
+    h2 -=1;
+}
+    
+if (X > 600){
+    X = -50;}
+x +=0.75;
+y +=0.75;
+speed +=-1;
+};
