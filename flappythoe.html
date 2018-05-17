@@ -330,6 +330,7 @@ void draw() {
    text("*Score will restart", width/2 , height - 160);
    if (mousePressed && mouseX > width/2 -10 && mouseX < width/2 + 110 && mouseY >height -212 && mouseY < height -182){
       count = 0;
+      bg = loadImage("./js/background.png");
       gamestate = 0;
       x = -200; 
       y = 100; 
