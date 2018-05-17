@@ -1,0 +1,459 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Processing Demo</title>
+<script type="text/javascript" src="js/processing.js"></script>
+</head>
+<body>
+<script type="text/processing">
+// I made this game after watching the tutorial on Flappy bird in Processing:
+//       https://www.youtube.com/watch?v=bV3joOueucg
+// I know I could write this code more efficiently but it was  more of an evolution of a game 
+// instead of a pre-concieved game.  I hope you like it ; )
+
+//Images
+PImage bg;
+PImage plane;
+PImage thoe;
+PImage HG;
+PImage ground;
+PImage heli;
+PImage tree;
+PImage PG;
+PImage jcon;
+PImage dusty;
+PImage me;
+PImage SAT;
+
+//Variables
+int count = 0;
+int gamestate = 2;
+int x = -200, y = 100, Vy;
+int gx = -200;
+int acc = 0; 
+int timer = 0;
+int level = 0;
+
+int[] Cx = new int[2]; //Chopper Arrays
+int[] Cy = new int[2];
+int[] wx = new int[2]; //Plane Arrays
+int[] wy = new int[2];
+int[] hx = new int[2]; //Hang Glider Arrays
+int[] hy = new int[2];
+int[] tx = new int[2]; //Tree Arrays
+int[] ty = new int[2];
+int[] px = new int[2]; //Paraglider Arrays
+int[] py = new int[2];
+int[] dx = new int[2]; //Dust Devil Arrays
+int[] dy = new int[2];
+
+int score = 0;  //Scoring Variables
+int highScore = 0;
+
+void setup(){
+  SAT = loadImage("./js/SAT.png");
+  me = loadImage("./js/me.png");
+  dusty = loadImage("./js/dusty.png");
+  jcon = loadImage("./js/jcon2.png");
+  count = (int)random(90,300);
+  size(600,500);
+  //imageMode(CENTER);
+  tree = loadImage("./js/tree.png");
+  plane = loadImage("./js/plane.png");
+  bg = loadImage("./js/background.png");
+  HG = loadImage("./js/HG.png");
+  tree = loadImage("./js/tree.png");
+  ground = loadImage("./js/ground.png");
+  heli = loadImage("./js/heli.png");
+  PG = loadImage("./js/pg.png");
+  image(bg, width/2, height/2);
+  thoe = loadImage("./js/thoe.png");
+  fill(0);  //Black Text
+  textSize(40);
+  background(0);
+}
+
+void draw() {
+  if (gamestate == 0){
+   timer ++;
+   textSize(40);
+   imageMode(CORNER);
+   image(bg, x, 0);
+   image(bg, x+bg.width, 0);
+   image(ground, gx,height - 46);
+   image(ground, gx+ground.width ,height - 46);
+   //background image control
+   if (timer%4==0){
+     x-=1;
+   }
+   if (x < -1000){
+     x = -200;
+   }
+   if (timer%3==0){
+     gx-=1;
+   }
+   if (gx < -1000){
+     gx = -200;
+   }
+   
+   //Flapping Head
+   image(thoe, width/4,y/2); //places face in 1/4 of screen
+   Vy += 1;
+   y += Vy; //Main iobject collisions to follow
+   
+//die from collision or running off the screen
+      if(y < -200 ){
+        fill(0,0,255); //Blue
+        text("You die of Hypoxia", width/2 - 100, height/2);
+        gamestate = 1;
+      }
+      if(y > 2 * height - 250 ){
+        fill(0);
+        text("You didn't FLARE!!!!", width/2 - 190, height/2);
+        gamestate = 1;
+      }   
+//Hang Gliders
+   for (int j = 0; j < 1; j++){
+     image(HG, hx[j], hy[j]);
+     if (hx[j] < -300) {
+        hy[j] = (int)random(0, height - 300);
+        hx[j] = width;
+      }
+     if(hx[j] == width/4 - 15){
+        score++;
+      }
+     if(abs(width/4+25 - hx[j]) < 35 && (abs(y/2+15 - hy[j]) < 30)){    
+        fill(255,0,0);
+        text("Mid-Air!!!  Toss your reserve", width/2 - 190, height/2);
+        gamestate =1;
+      }
+     hx[j] -= 1; 
+     if(score == 13){
+        text("Level 4!  Next Gen HG's!!!!", width/2 - 200, height/5 + 20);
+        hx[j] -=1;
+      }
+      if(score > 13){
+        hx[j] -=1;
+        if (hx[j] + 1 == width/4 -15){
+          score++;
+        }
+      }
+   }  
+//Planes
+   for (int i = 0; i < 1; i++){
+     image(plane, wx[i], wy[i]);
+     if (wx[i] < -300) {
+        wy[i] = (int)random(0, height - 300);
+        wx[i] = width + 1000;
+      }
+     if(wx[i] == width/4 - 14 || wx[i] + 1 == width/4 -15){
+        score++;
+      }      
+     if(abs(width/4 - wx[i]) < 35 && (abs(y/2 - wy[i]) < 75)){    
+        fill(255,0,0);
+        text("OUCH!  You hit a plane!", width/2 - 200, height/2);
+        gamestate =1;
+      }
+//Speed control and General Level Up 
+      wx[i] -= 3;
+      if(score == 3 || score == 4){
+        text("Level 2!  Watch out!!!", width/2 - 200, height/5 + 20);
+        wx[i] -=3;
+      }
+      if(score > 4){
+        wx[i] -=3;
+      }
+      if(score == 10 || score == 11){
+        text("Level 3!  Rescue Heli's!!!", width/2 - 200, height/5 + 20);
+      }
+      if (score > 30){
+        wx[i] -=3;
+      }
+   }
+//trees
+   for (int c = 0; c < 1; c++){
+     image(tree, tx[c] - 20, ty[c]);
+     image(tree, tx[c] - 90, ty[c]);
+     image(tree, tx[c] - 190, ty[c]);
+     image(tree, tx[c] - 220, ty[c]);
+     image(tree, tx[c] - 390, ty[c]);
+     if (tx[c] < -10) {
+        ty[c] = height - 95;
+        tx[c] = width + 400;
+      }
+     if(abs(width/4 + 100 - tx[c]) < 55 && (abs(y/2 - ty[c]) < 60)){    
+        fill(255,0,0);
+        text("Dude!  You hit a tree???", width/2 - 190, height/2);
+        gamestate =1;
+      }
+      if(abs(width/4 + 30 - tx[c]) < 55 && (abs(y/2 - ty[c]) < 60)){    
+        fill(255,0,0);
+        text("Dude!  You hit a tree???", width/2 - 190, height/2);
+        gamestate =1; 
+      }
+     if(abs(width/4 + 230 - tx[c]) < 55 && (abs(y/2 - ty[c]) < 60)){    
+        fill(255,0,0);
+        text("Dude!  You hit a tree???", width/2 - 190, height/2);
+        gamestate =1;
+      }
+     if(abs(width/4 + 200 - tx[c]) < 55 && (abs(y/2 - ty[c]) < 60)){    
+        fill(255,0,0);
+        text("Dude!  You hit a tree???", width/2 - 190, height/2);
+        gamestate =1;
+      }
+     if(abs(width/4 + 400 - tx[c]) < 55 && (abs(y/2 - ty[c]) < 60)){    
+        fill(255,0,0);
+        text("Dude!  You hit a tree???", width/2 - 190, height/2);
+        gamestate =1;
+      }
+      if (timer%3 == 0){
+      tx[c] -= 1; 
+      }
+   }  
+//Paragliders 
+   if (score > 2){
+     for (int j = 0; j < 1; j++){
+       image(PG, px[j], py[j]);
+       if (px[j] < -300) {
+          py[j] = (int)random(100, height - 100);
+          px[j] = width;
+        }
+       if(px[j] + 5 == width/4 - 15){
+          score++;
+        }
+       if(abs(width/4+25 - px[j]) < 35 && (abs(y/2+15 - py[j]) < 30)){    
+          fill(255,0,0);
+          text("Stupid Paragliders!!!", width/2 - 190, height/2);
+          gamestate =1;
+        }
+       if (timer%2==0){
+       px[j] -= 1; 
+       }
+     }
+   }
+// Dust Devils
+   if (score > 22){
+     for (int j = 0; j < 1; j++){
+       dy[j] = (height - 175);
+       image(dusty, dx[j] - 200, dy[j]);
+       if (dx[j] > 820) {
+          dx[j] = -100;
+        }
+       if(dx[j] == width/4 - 15){
+          score++;
+        }
+       if(abs(width/4+170 - dx[j]) < 65 && (abs(y/2+15 - dy[j]) < 50)){    
+          fill(255,0,0);
+          text("DUST DEVIL!!!", width/2 - 190, height/2);
+          gamestate =1;
+        }
+       if (timer%2==0){
+       dx[j] += 5; 
+       }
+       if (score >40){
+         dx[j] +=5;
+       }
+     }
+   } 
+//Helicopter
+     if (score > 9){     
+       for (int x = 0; x < 1; x++){
+       image(heli, Cx[x], Cy[x]);
+       if (Cx[x] < count){
+         Cx[x] +=1;
+        }
+       if (acc > count && acc < 2*count){
+         Cy[x] += 1;
+       }
+       if (acc > 3*count && acc < 4*count){
+         Cy[x] -=1;
+       }
+       if (acc > 5*count){
+         Cx[x] -=2;
+       }
+       if (acc > 7*count){
+         acc = 0;
+         count = 0;
+         count = (int)random(90,300);
+       }
+       acc +=1;
+       if(abs(width/4 - Cx[x]) < 35 && (abs(y/2 - Cy[x]) < 45)){    
+        fill(255,0,0);
+        textSize(30);
+        text("That's the wrong way to do a Heli!", width/2 - 250, height/2);
+        gamestate =1;
+      }
+       }
+     }              
+  fill(0,55,0);
+  textSize(40);
+  if (score == 20 || score == 21){
+    text("Wow!  You're a great pilot!", width/2 - 250, height/2);
+    bg = jcon;
+  }
+  if (score > 21){
+    bg = jcon;
+  }
+  if (score > highScore){
+    highScore = score;
+  }
+  if (score > 49){
+    gamestate = 50;
+  }
+  fill(0,155, 0);
+  textSize(20);
+  text("Your Score = " + score, width/2 + 145, 35);
+  fill(0,155,0);
+  textSize(20);
+  fill(0, 55,0);
+  text("High Score = " + highScore, width/2 + 145, 55);
+  noFill();
+  if (score > 49){
+    gamestate =4;
+  }
+  //rect(width/2 + 170, 15, 100, 30);
+ }
+
+ //Restart the game
+ if (gamestate ==1){
+   fill(100,100,100);
+   rect(width/2-10, height -212, 136, 30, 10);
+   rect(width/2-170, height -212, 122, 30, 10);
+   fill(0,255,0);
+   score = 0;
+   textSize(20);
+   text("Keep Playing", width/2 , height - 190);
+   text("Main Menu", width/2 - 160 , height - 190);
+   textSize(15);
+   fill(0,155,0);
+   text("*Score will restart", width/2 , height - 160);
+   if (mousePressed && mouseX > width/2 -10 && mouseX < width/2 + 110 && mouseY >height -212 && mouseY < height -182){
+      count = 0;
+      gamestate = 0;
+      x = -200; 
+      y = 100; 
+      Vy = 0;
+      acc = 0;
+      score = 0;      
+      count = (int)random(90,300);
+   }
+   if (mousePressed && mouseX > width/2 -170 && mouseX < width/2 + -50 && mouseY >height -212 && mouseY < height -182){
+     gamestate = 2;  
+   }
+ }
+ if (gamestate == 2){
+   textSize(36);
+   background(0);
+   fill(100,100,100);
+   rect(width/4-10, height -224, 120, 40, 10);
+   fill(0,255,0);
+   score = 0;
+   text("Enter", width/4 , height - 190);
+   textSize(40);
+   text("Welcome to Flappy Thoe!", 50, height - 130);
+   textSize(23);
+   fill(0,125,0);
+   text("* My first video game", 100, height - 90);
+   text("* Written in Pocessing and Powered by JS", 100, height - 60);
+   image(SAT, 200,10);
+   if (mousePressed && mouseX > width/4 -10 && mouseX < width/4 + 110 && mouseY >height -212 && mouseY < height -182){
+      gamestate = 3;
+   }
+ }
+ if (gamestate == 4){
+   image(me,0,0);
+   fill(255,255,0);
+   textSize(50);
+   text("You Beat my game!", 100, 100);
+   if (level==2){
+     text("ON THE HARDEST LEVEL!!!", 100, 200);
+   }
+   }
+ if (gamestate == 3){
+   background(0);
+   image(thoe, width/2 - 20, 30);
+   fill(80);
+   rect(10,140,580,180,4);
+   fill(0);
+   rect(12,142,576,176,4);
+   fill(0,255,0);
+   score = 0;
+   textSize(28);
+   text("1) CLICK mouse or TAP screen to \"Flap\"  ", 20, 180);
+   text("2) Don't hit ANY objects!", 20, 240);
+   text("3) Don't go TOO HIGH or LOW!", 20, 300);
+   
+   //Select Level
+   fill(100,100,100);
+   rect(width/2-208, height -167, 76, 36, 10);
+   fill(0,255,0);
+   score = 0;
+   text("Easy", width/2 -200, height - 140);
+   if (mousePressed && mouseX > 90 && mouseX < 166 && mouseY >338 && mouseY < 366){
+      count = 0;
+      gamestate = 0;
+      x = -200; 
+      y = 100; 
+      Vy = 0;
+      acc = 0;
+      score = 0;      
+      count = (int)random(90,300);
+      level = 1;
+   }
+   fill(100,100,100);
+   rect(width/2-108, height -167, 126, 36, 10);
+   fill(0,255,0);
+   score = 0;
+   text("Medium", width/2 - 100, height - 140);
+   if (mousePressed && mouseX > 190 && mouseX < 320 && mouseY >338 && mouseY < 366){
+      count = 0;
+      gamestate = 0;
+      x = -200; 
+      y = 100; 
+      Vy = 0;
+      acc = 0;
+      score = 0;      
+      count = (int)random(90,300);
+      level = 2;
+   }
+   fill(100,100,100);
+   rect(width/2+42, height -167, 76, 36, 10);
+   fill(0,255,0);
+   score = 0;
+   text("Hard", width/2 + 50, height - 140);
+   if (mousePressed && mouseX > 340 && mouseX < 416 && mouseY >338 && mouseY < 366){
+      count = 0;
+      gamestate = 0;
+      x = -200; 
+      y = 100; 
+      Vy = 0;
+      acc = 0;
+      score = 0;      
+      count = (int)random(90,300);
+      level = 3;
+   }
+   fill(200,0,0);
+   textSize(18);
+   text("*I'm sorry about some of my glitches ; )", 130, height - 70);
+   
+   //text("" + mouseY, mouseX, mouseY);  Button Edge Locator if you decide to change the window
+   //I got tired so I hard coded these numbers ;)
+ }
+}
+
+//"Flapping"
+void mousePressed() {
+  if (level == 1){
+  Vy = -13;
+  }
+  if (level == 2){
+    Vy  = -15;
+  }
+  if (level == 3){
+    Vy = -17;
+  }
+}
+</script>
+<canvas id="sketch" style="border: 1px solid black;"></canvas>
+</body>
+</html>
