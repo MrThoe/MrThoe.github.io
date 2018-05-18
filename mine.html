@@ -51,9 +51,9 @@ void draw(){
 }
 
 void mousePressed(){
-  if (abs(mouseX - x) < 50 && abs(mouseY - y) < 50){
+  if (abs(mouseX - x) < 100 && abs(mouseY - y) < 100){
     Vx = -Vx;
-    Vy = -Vy;
+    Vy = Vy+1;
     score +=1;
   }
 }
