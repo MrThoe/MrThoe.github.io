@@ -29,7 +29,9 @@ PImage SAT;
 //Variables
 int count = 0;
 int gamestate = 2;
-int x = -200, y = 100, Vy;
+int scroll = -200;
+int y = 100;
+int Vy = 0;
 int gx = -200;
 int acc = 0; 
 int timer = 0;
@@ -78,16 +80,17 @@ void draw() {
   if (gamestate == 0){
    timer ++;
    textSize(40);
-   imageMode(CORNER);
-   image(bg, x, 0);
-   //image(bg, x+bg.width, 0);
+   //imageMode(CORNER);
+   image(bg, scroll, 0);
+   image(bg, scroll + bg.width, 0);
    image(ground, gx,height - 46);
    image(ground, gx+ground.width ,height - 46);
    //background image control
-   
-     x -=1;
-   if (x < -1000){
-     x = -200;
+   if (timer%4 == 0){
+     scroll -=1;
+   }
+   if (scroll < -1000){
+     scroll = -200;
    }
    if (timer%3==0){
      gx-=1;
@@ -297,9 +300,6 @@ void draw() {
   if (score > highScore){
     highScore = score;
   }
-  if (score > 49){
-    gamestate = 4;
-  }
   fill(0,155, 0);
   textSize(20);
   text("Your Score = " + score, width/2 + 145, 35);
@@ -314,7 +314,7 @@ void draw() {
   //rect(width/2 + 170, 15, 100, 30);
  }
 
- //Restart the game
+ // Different Game states
  if (gamestate ==1){
    fill(100,100,100);
    rect(width/2-10, height -212, 136, 30, 10);
