@@ -82,13 +82,12 @@ void draw() {
    textSize(40);
    imageMode(CORNER);
    image(bg, x, 0);
-   image(bg, x+bg.width, 0);
+   //image(bg, x+bg.width, 0);
    image(ground, gx,height - 46);
    image(ground, gx+ground.width ,height - 46);
    //background image control
-   if (timer%4==0){
-     x-=1;
-   }
+   
+     x -=1;
    if (x < -1000){
      x = -200;
    }
@@ -360,7 +359,7 @@ void draw() {
    text("* My first video game", 100, height - 90);
    text("* Written in Pocessing and Powered by JS", 100, height - 60);
    image(SAT, 200,10);
-   if (mousePressed && mouseX > width/4 -10 && mouseX < width/4 + 110 && mouseY >height -212 && mouseY < height -182){
+   if (mousePressed){
       gamestate = 3;
    }
  }
