@@ -89,6 +89,9 @@ void draw() {
    if (timer%4 == 0){
      scroll -=1;
    }
+   if (level == 3){
+       scroll -= 1;
+   }
    if (scroll < -1000){
      scroll = -200;
    }
@@ -129,6 +132,9 @@ void draw() {
         fill(255,0,0);
         text("Mid-Air!!!  Toss your reserve", width/2 - 190, height/2);
         gamestate =1;
+      }
+    if (level == 3){
+       hx[j] -= 1;
       }
      hx[j] -= 1; 
      if(score == 13){
@@ -184,6 +190,10 @@ void draw() {
         ty[c] = height - 95;
         tx[c] = width + 400;
       }
+     
+     if (level == 3){
+       tx[c] -= 1;
+      } 
      if(abs(width/4 + 100 - tx[c]) < 55 && (abs(y/2 - ty[c]) < 60)){    
         fill(255,0,0);
         text("Dude!  You hit a tree???", width/2 - 190, height/2);
