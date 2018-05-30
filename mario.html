@@ -1,0 +1,170 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Mario</title>
+<link rel="shortcut icon" type="image/x-icon" href="./img/cvhs.jpg" />
+<script type="text/javascript" src="js/processing.js"></script>
+<script type="text/javascript" src="js/buzz.min.js"></script>
+<script type="text/javascript">
+    var smb = new buzz.sound("./js/smb", {formats: ["mp3"]});
+</script>
+ </head>
+<body>
+    <input type="button" onclick="smb.play()"; />
+<script type="text/processing">
+PImage back; PImage flap; PImage flapL; PImage costume; 
+PImage goomba; PImage goombaL; PImage goombaSQ; PImage GCostume;
+
+import processing.sound.*;
+SoundFile music; SoundFile die; SoundFile jump;
+
+
+int x = 0; int count = 0; int Mx = 100; int My = 460; int Vy = 0; int Gx = 1200; int y = 480; int collision=0; int high; int highscore;
+int gamestate = 0; int Gstate = 1; int killcounter = 0;
+
+void setup(){
+ size(1000,600);
+ back = loadImage("./js/marioback.png"); //Background
+ flap = loadImage("./js/flap.png"); flapL = loadImage("./js/flapL.png"); //Mario
+ costume = flap;
+ goomba = loadImage("./js/goomba.png");  goombaL = loadImage("./jsgoombaL.png");  goombaSQ = loadImage("./img/goombaSQ.png"); 
+ GCostume = goomba;
+ //music = new  SoundFile(this, "smb.mp3");// die = new SoundFile(this, "./data/die.wav"); jump = new SoundFile(this, "./data/jump.wav");
+ //music.loop();
+ textSize(40);
+ strokeWeight(3);
+ fill(0);
+}
+
+void draw(){
+  if(gamestate == 0){
+     
+     //background Control
+     image(back, 0 + x, 0);
+     image(back, 1071 + x, 0);
+     if (x == -1071){
+       x=0;
+       Gx = 1200;
+       Gstate = 1;
+       }
+     //goombas
+     Goomba();
+     
+      
+     //Mario Control
+     image(costume, Mx, My + Vy);
+      My += Vy;
+     if (My > 460){
+       Vy = 0;
+       My = 460;
+     }
+     if (My<460 && count%2==0){
+     Vy +=1;
+     }     
+     count++;
+     if (keyPressed){
+         if(keyCode==RIGHT){
+           costume = flap;
+           if(Mx > 500){ 
+             x-=3;
+           }
+           else{
+             Mx +=3;
+         }
+       }
+         if(keyCode==LEFT){
+           costume = flapL;
+           if(Mx > 30){ 
+             Mx -=3;
+           }
+         }
+      }
+      noFill();
+      rect(800, 20, 180, 40,5);
+      text("Kills: " + killcounter,805, 55);
+  }
+  if (gamestate == 2){
+    restart();
+  }
+}
+
+void mousePressed(){
+ if (Vy > -5 && My > 0){  //Maximize how fast he can fly up
+   Vy -=13;
+   //jump.play();
+   //jump.rate(.75); //lowes pitch
+   //jump.amp(.5); //lowers volume
+ }
+}
+
+void Goomba(){
+  if (Gstate == 1){
+   if (count%10==0){
+     GCostume = goomba;
+     Gx--;
+   }
+   else if (count % 12 == 0){
+     GCostume = goombaL;
+   }
+   collision = Gx + x;
+   if (abs(Mx - collision)<25 && My > 410){
+     if (My < 450){
+       kill();
+       Gstate = 0;
+       high++;
+     }
+     //Mario Dies
+     else if(GCostume == goomba ){dies();}
+   }
+   image(GCostume, collision, y); 
+  }
+  else if(Gstate ==0){
+    GCostume = goombaSQ;
+    if (killcounter < high){
+      killcounter++;
+    }
+    image(GCostume, collision, y + 25); 
+    collision = Gx + x;
+    }
+}
+
+
+void dies(){
+  gamestate = 2;
+  music.stop();
+  //die.play();
+  //die.rate(.5);
+}
+void kill(){
+       GCostume = goombaSQ;
+       image(GCostume, collision, y); 
+}
+
+void restart(){
+  if (mouseX >200 && mouseX < 430 && mouseY > 200 && mouseY < 250){
+    fill(155, 0, 0);
+    if (mousePressed){
+      gamestate = 0;
+      music.loop();
+      killcounter=0;
+      high=0;
+    }
+  }
+  else{
+    fill(255);
+  }
+  rect(200, 200, 230, 50, 5);
+  fill(0);
+  text("Restart?",215, 240);
+  if (killcounter > highscore){
+    highscore = killcounter;
+  }
+  text("High Score: " + highscore, 205, 170);
+  x = 0; count = 0; Mx = 100; My = 460; Vy = 0; Gx = 1200;  y = 480; collision=0;
+  Gstate = 1; killcounter = 0;
+  
+}
+</script>
+<canvas id="sketch" style="border: 1px solid black;"></canvas>
+</body>
+</html>
