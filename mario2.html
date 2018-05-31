@@ -7,9 +7,10 @@
 <script type="text/javascript" src="js/processing.js"></script>
 <script type="text/javascript" src="js/buzz.min.js"></script>
 <script type="text/javascript">
-    var di = new buzz.sound("./js/di", {formats: ["mp3"]});
-    var smb = new buzz.sound("./js/smb", {formats: ["mp3"]});
-    var jump = new buzz.sound("./js/jump", {formats: ["mp3"]});
+    var di = new buzz.sound("./js/di.mp3"),
+        jump = new buzz.sound("./js/jump.mp3");
+        smb = new buzz.sound("./js/smb.mp3");
+
     </script>
 
 </head>
@@ -34,7 +35,6 @@ void setup(){
  goomba = loadImage("./js/goomba.png");  goombaL = loadImage("./jsgoombaL.png");  goombaSQ = loadImage("./img/goombaSQ.png"); 
  GCostume = goomba;
  //music = new  SoundFile(this, "smb.mp3");// die = new SoundFile(this, "./data/die.wav"); jump = new SoundFile(this, "./data/jump.wav");
-
  smb.play();
  //die.play();
  textSize(40);
@@ -90,6 +90,7 @@ void draw(){
       text("Kills: " + killcounter,805, 55);
   }
   if (gamestate == 2){
+    smb.stop();
     restart();
   }
 }
