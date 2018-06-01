@@ -1,0 +1,198 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Processing Demo</title>
+<script type="text/javascript" src="./js/processing.js"></script>
+</head>
+
+<body>
+<script type="text/processing">
+
+///Processing code goes in between the script tags
+PImage background; PImage FL; PImage FR; PImage WL; PImage WR; PImage costume; PImage EnL; PImage EnR;
+int x = 200; int y=462; int Vy; int counter; int state; float Ex= 1200; float Ey=100;
+int gamestate = 0; float Cx; float Cy; float Ecx; float Ecy; int score; int highScore;
+void setup(){
+ size(1000,612);
+ background = loadImage("./img/back.png") ;
+ FL = loadImage("./img/birdFL.png");
+ FR = loadImage("./img/birdFR.png");
+ WL = loadImage("./img/birdWL.png");
+ WR = loadImage("./img/birdWR.png");
+ EnL = loadImage("./img/EnFL.png");
+ EnR = loadImage("./img/EnFR.png");
+ costume = WR;
+ textSize(25);
+ strokeWeight(3);
+ state = 0; //standing
+}
+
+void draw(){
+ Ecx = Ex + 23;
+ Ecy = Ey + 18;
+ Cx = x + 23;
+ Cy = y + 18;
+ if (gamestate==0){
+ Ex --;
+ if(Ex < -100){
+   Ex = random(1200,1400);
+   Ey = random(40,110);
+ }
+ if (counter%10 ==0){
+   Ey +=random(-4,3);
+ }
+ if (counter%60 ==0){
+   Ey--;
+ }
+ image(background,0,0);
+ if (score > highScore){
+   highScore = score;
+ }
+ text("Score = " + score, 250, 562);
+ text("High Score = " + highScore, 550, 562);
+ image(costume, x, y);
+ //fill(255);
+ //rect(x,y,46,35);
+ //fill(0);
+ //ellipse(x+23,y+18,46,36);
+ 
+ fill(255);
+ image(EnL, Ex, Ey);
+ ///rect(Ex, Ey, 46, 35);
+ fill(0);
+ //ellipse(Ex+23,Ey+18,46,36);
+ if (keyPressed){
+   if (keyCode == RIGHT){
+     if (y >= 462){
+       costume = WR;
+       y = 462;
+     }
+     else{costume = FR;}
+     x+=2;
+   }
+   
+   else if(keyCode == LEFT){
+     if (y >= 462){
+       costume = WL;
+       y = 462;
+     }
+     else {costume = FL;}
+     x-=2;
+   }
+ }
+   else if(keyCode ==DOWN){
+     y = y + 15;
+     state = 1; 
+   }
+ 
+  if (state==1){
+    Vy++;
+    y += Vy;
+   }
+  
+  
+   //Upper Center platform
+  if (x>300 && x < 565 && y > 108 && y < 126 && Vy >0){
+          state = 0;
+          y =110;
+       }     
+    //Lower Center platform
+  if (x>344 && x < 565 && y > 308 && y < 319 && Vy >0){
+          state = 0;
+          y = 310;
+       } 
+       
+    //Upper Left platform
+  if (x>-10 && x < 110 && y > 93 && y < 106 && Vy >0){
+          state = 0;
+          y = 86;
+       }   
+   //Lower Left platform
+  if (x>-10 && x < 215 && y > 268 && y < 279 && Vy >0){
+          state = 0;
+          y = 260;
+       }
+  
+    //Upper Right platform
+  if (x>827 && y > 93 && y < 106 && Vy >0){
+          state = 0;
+          y = 86;
+       }
+   //Middle Right platform
+  if (x<883 && x > 670 && y > 248 && y < 259 && Vy >0){
+          state = 0;
+          y = 236;
+       }       
+   //Lowest Right platform
+  if (x>882 &&  y > 268 && y < 279 && Vy >0){
+          state = 0;
+          y = 260;
+       }  
+    
+ //Fighting Code
+ if (abs(Cx - Ecx) < 46 && abs(Cy-Ecy) < 36){
+   if(Cy > Ecy){
+   gamestate = 1;
+   }
+   else {
+     Ex = -100;
+     Ecx = Ex;
+     score++;
+   }
+ }
+ 
+ 
+ if (state ==0){
+    if (costume == FL){
+      costume = WL;
+    }
+    else if (costume == FR){
+    costume = WR;
+    }
+  }
+ 
+ if (y>=462){
+   y= 462;
+   state = 0;
+ }
+ if (x>width){
+   x = -20;
+ }
+ else if(x < -20){
+   x = width;
+ }
+ counter ++;
+ }
+ 
+ if (gamestate==1){
+  counter++;
+  fill(249,145,9);
+  if (mouseX > 20 && mouseX < 120 && mouseY > 50 && mouseY < 96){
+    if(mousePressed){
+      x = 100; y=462; Ex = -100; score = 0; gamestate = 0;
+    }
+    else {fill(174,248,0);}
+  }
+    rect(20, 50, 100, 46, 3);
+  fill(255);
+  textSize(40);
+  if (counter%10 ==0){
+  text("You Died ", random(180,600), random(180,330));
+  }
+  textSize(22);
+  fill(0);
+  text("Restart?", 29, 81);
+ 
+ }
+}
+
+void mousePressed(){
+  Vy = -15;
+  state = 1;
+}
+  
+</script>
+<canvas id="sketch" style="border: 1px solid black;"></canvas>
+</body>
+</html>
