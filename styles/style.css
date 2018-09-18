@@ -198,8 +198,7 @@ footer{
 	font-size:100%;
 	padding: 1%;
 	width: 29%;
-	min-height: 350px;
-	max-height: 350px;
+	height: 300px;
 	float: right;
 	border-radius: 5px;
 	margin-left:1%; margin-right:1%;
