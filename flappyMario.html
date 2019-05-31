@@ -8,27 +8,29 @@
 <body>
 <script type="text/processing">
   
-  
 import processing.pdf.*;
 
 PFont font1; PFont font2; PFont bold;
 PImage bg; PImage bgR; PImage cat; PImage cat2; PImage costume;
-int x; int cx; int cy; int cVy;
+
+int x; int cx; int cy; int cVy; int moveSpeed;
 int numKnives = 7;
 int gameState; PImage knife; int[] kx = new int[numKnives]; int[] ky = new int[numKnives]; int count;
 int score; int highScore; 
 PImage bullet; int bx; int by;
-PImage fire; int fx; int fy;
+PImage fireBall; int fx; int fy;
 PImage back2; int fireCount; int bulletCount;
 boolean isShooting; boolean bull;
-PImage ghost; int gx; int gy;
+PImage ghost; PImage ghostCostume; PImage ghost2; PImage ghostR; PImage ghost2R;
+int gx; int gy; int ghostCount; int ghostTimer; int ghostCount2;
+int chaseCount;
 
 
 void setup(){
   isShooting = true;
   bull = false;
   gameState = -1;
-  font2 = createFont("Georgia", 18);
+  font2 = createFont("Georgia", 16);
   font1 = createFont("CHILLER", 35);
   bold = createFont("GEORGIA", 24);
   size(800,600);
@@ -39,12 +41,18 @@ void setup(){
   costume = cat;
   knife = loadImage("./img/squid.png");
   bullet = loadImage("./img/bullet.png");
-  fire = loadImage("./img/fire.png");
+  fireBall = loadImage("./img/fire.png");
   back2 = loadImage("./img/mario.jpg");
   ghost = loadImage("./img/ghost.png");
+  ghost2 = loadImage("./img/ghost2.png");
+  ghostR = loadImage("./img/ghostR.png");
+  ghost2R = loadImage("./img/ghost2R.png");
+  ghostCostume = ghost;
+  
   cVy = 2;
   cy = 100;
   cx = 50;
+  gx = width + 500;
   fx = width + 10000;
   bx = width + 200;
   by = (int)random(200,600);
@@ -57,7 +65,7 @@ void setup(){
 
 
 void draw(){
-
+  moveSpeed++;
   count++;
   move();
   if(score > highScore){
@@ -68,11 +76,18 @@ void draw(){
   image(bg, x, 0);
   image(bgR, x+bg.width-6, 0);
   image(bg, x+2*bg.width -12, 0);
+  if(score > 35){
+    bx++;
+    x++;
+    for(int i = 0; i < numKnives; i++){
+      kx[i]++;  
+    }
+  }
   if(x < -(2*bg.width+12)){
     x=0;
   } 
 
-  //KNIFE CODE!!
+  //SQUID CODE!!
   for(int i = 0; i<numKnives ; i++){
     kx[i]-= 2;
     if(kx[i] < -10){
@@ -80,7 +95,7 @@ void draw(){
       kx[i] = width + (int)random(50, 200);
       ky[i] = height/2 + (int)random(-200,200);
     }
-    if(abs((int)((fx+10)-(kx[i]+5))) < 10 && abs((int)((fy+10) - (ky[i]+32))) < 56){
+    if(abs((int)((fx+10)-(kx[i]+5))) < 10 && abs((int)((fy+10) - (ky[i]+32))) < 46){
       kx[i]+=2000;
       fx = width +20000;
       score++;
@@ -92,7 +107,7 @@ void draw(){
     
     //Bullet Code
     if(score >10){
-      bx -= 3;
+      bx -= 1;
       if(score > 20){
         chaseMario();
       }
@@ -106,6 +121,70 @@ void draw(){
       image(bullet, bx, by);
     }     
   }
+      //GHOST Code
+    if(score >-1){
+      if(gx > cx){
+        gx--;
+      }
+      else if(ghostCount%5==0){
+        if(gx > width){
+          gx -= 1;
+        }
+        if(gx > cx){
+          gx--;
+        }
+        if(gy < cy){
+          gy+=2;
+        }
+        if(gx < cx){
+          gx++;
+        }
+        if(gy > cy){
+          gy-=2;
+        }
+      }
+      if(gx < -100){
+         gx = width + 3000;
+         gy = (int)random(200,600);
+      }
+      if(abs((int)((cx+35)-(gx+67))) < 50 && abs((int)((cy+34) - (gy+67))) < 50){
+        gameState=1;
+      }
+      if(gx > cx){
+        ghostCostume = ghost;
+      }
+      else{
+        ghostCostume = ghostR;
+      }
+      if(ghostTimer > 1500){
+        if(ghostCount%3==0){
+          if(gx > cx){
+            ghostCostume = ghost2;
+          }
+          else{
+            ghostCostume = ghost2R;
+          }
+          ghostCount2++;
+        }
+        if (ghostCount2%3==0){
+          if(gx > cx){
+            ghostCostume = ghost;
+          }
+          else{
+            ghostCostume = ghostR;
+          }
+        }
+      }
+      if (ghostTimer > 1700){
+        gx +=1500;
+        ghostTimer = -500;
+        ghostCostume = ghost;
+      }
+      image(ghostCostume, gx, gy);
+      ghostCount++;
+      ghostTimer++;
+    }     
+  
   
   //CAT CODE!!!
   image(costume, cx,cy);
@@ -117,11 +196,12 @@ void draw(){
   checkCat();
   
   //FIREBALL CODE
-  image(fire, fx, fy);
+  image(fireBall, fx, fy);
   fx += 10;
   if(abs((int)((fx+10)-(bx+75))) < 80 && abs((int)((fy+10) - (by+52))) < 86){
       bx+=2000;  
       fx =20000;
+      score++;
       if(bulletCount==0){
         bull = true;
       }
@@ -155,6 +235,7 @@ void draw(){
         cVy = 2;
         cx = 50;
         score = 0;
+        gx = width + 500;
         fx = width + 10000;
         bx = width + 200;
         by = (int)random(200,600);       
@@ -194,7 +275,7 @@ void draw(){
       text("Did you know Mario can shoot FIREBALLS?", 120, 30);
     }
     else{
-       text("Use the DOWN ARROW to shoot", 120, 30);
+       text("Use the SPACE BAR to shoot", 120, 30);
     }
   }
   if(!isShooting && fireCount >0 && score > 3){
@@ -203,7 +284,7 @@ void draw(){
         text("I wonder what things can be killed by fireballs?", 140, 60);
      }
    }
-   if(bull){
+   if(bull &&score < 20){
      text("WOW!  Fireballs can destroy Bullets!", 140, 60);
    }
   
@@ -219,15 +300,15 @@ void draw(){
     }   
 
     textFont(font2);
-    text("MOVE:  LEFT/RIGHT ARROW", 15, 145);
-    text("FIRE:     DOWN ARROW", 15, 170);
-    text("FLAP:     CLICK MOUSE", 15, 195); 
+    text("MOVE:  LEFT/RIGHT MOUSE", 15, 145);
+    text("FIRE:  SPACE OR RIGHT CLICK", 15, 170);
+    text("FLAP:  LEFT CLICK", 15, 195); 
     
     fill(0,0,0, 255);
     textFont(bold);
     text("MARIO CONTROLS", 25, 115);
     noFill();
-    rect(10, 125, 262,75, 5);
+    rect(10, 125, 248,75, 5);
   }
   
 }
@@ -235,31 +316,34 @@ void draw(){
 
 
 void move(){
-  if (keyPressed){    
-    if(cx > 0 && keyCode==LEFT){
-      cx-=2;
-    }
-    else if(cx <width/2 && keyCode==RIGHT){
-      cx+=2;
-    }
+  if (mouseX > cx){    
+    cx+=2;
   }
-
-}
-void keyReleased() {
-   if(keyCode==DOWN){
-     marioFire();
-   }
+  else if(mouseX < cx){
+    cx-=2;
+  }
 }
 
+void keyPressed(){
+  if(key==32){
+    fire();
+  }
+}
 void mousePressed(){
-  cVy = -11; 
+  if(mouseButton == LEFT){
+    cVy = -11;
+  }
+  else if(mouseButton == RIGHT){
+    fire();
+  }
   costume = cat2;
+  
 }
 
 void mouseReleased(){
   costume = cat; 
 }
-void marioFire(){
+void fire(){
   fx = cx + 20;
   fy = cy + 45;
   fireCount++;
@@ -277,9 +361,16 @@ void checkCat(){
 }
 
 void chaseMario(){
-   //TODO 
+   if(by > cy && chaseCount%3==0){
+     by--;
+     bx--;
+   }
+   if(by < cy && chaseCount%3==0){
+     by++;
+     bx--;
+   }
+   chaseCount++;
 }
-
 </script>
 <canvas id="sketch" style="border: 1px solid black;"></canvas>
 </body>
