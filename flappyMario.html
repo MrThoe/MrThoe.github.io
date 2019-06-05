@@ -122,11 +122,11 @@ void draw(){
     }     
   }
       //GHOST Code
-    if(score >-1){
-      if(gx > cx && score > 15){
+    if(score >15){
+      if(gx > cx){
         gx--;
       }
-      else if(ghostCount%5==0){
+      else if(ghostCount%4==0){
         if(gx > width){
           gx -= 1;
         }
@@ -156,7 +156,7 @@ void draw(){
       else{
         ghostCostume = ghostR;
       }
-      if(ghostTimer > 1500){
+      if(ghostTimer > 2500){
         if(ghostCount%3==0){
           if(gx > cx){
             ghostCostume = ghost2;
@@ -175,7 +175,7 @@ void draw(){
           }
         }
       }
-      if (ghostTimer > 1700){
+      if (ghostTimer > 2700){
         gx +=1500;
         ghostTimer = -500;
         ghostCostume = ghost;
