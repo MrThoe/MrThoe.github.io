@@ -1,0 +1,66 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Processing Demo</title>
+<script type="text/javascript" src="js/processing.js"></script>
+</head>
+
+<body>
+  <h1>Bouncing Ball</h1>
+  <p>I kust made this to see if I could reproduce an animation I saw on <b>Khan Academy</b></p>
+<script type="text/processing">
+/** This program will make a bouncing
+  * ball with a shadow under it
+  * @Author: Allen Thoe
+  */
+int Vx, Vy, x, y, r, Sr, Os, diff;
+
+void setup(){
+  size(400,600);
+  x = width/2;
+  y = 50;
+  r = 50;
+  Os = 200;
+  noStroke();
+}
+
+void draw(){
+  background(162, 255, 255);
+  fill(255, 255, 255);
+  rect(0, width, height - 200, height); 
+  fill(247, 2, 2);
+  ellipse(x, y, r, r);
+  updatePosition();
+
+  drawShadow();
+  println("Y Position: " + y);
+}
+
+
+void updatePosition(){
+  x += Vx;
+  y += Vy;
+  Vy++;
+  bounce();
+}
+
+void bounce(){
+  if ( y >= height - 140){
+    Vy = -19; //This controls how "hard" it bounces
+  }
+}
+
+void drawShadow(){
+  Sr = ( y/3 - 200 );  //Change the size of the shadow as it moves further from its shadow
+
+  fill(230, 230, 230);
+ellipse(width/2, height - 100, Sr , 10);
+}
+
+
+
+
+</script>
+<canvas id="sketch" style="border: 1px solid black;"></canvas>
+</body>
+</html>
