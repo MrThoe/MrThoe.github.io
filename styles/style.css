@@ -262,3 +262,13 @@ body a:hover{
 footer h1 {
 	color: 000;
 }
+
+ul li a{
+	text-decoration: none;
+	color: #C5B358;
+}
+
+ul li {
+	text-decoration: none;
+	margin-left: 20px;
+}

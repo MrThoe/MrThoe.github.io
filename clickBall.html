@@ -1,0 +1,143 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Processing Demo</title>
+<script type="text/javascript" src="js/processing.js"></script>
+</head>
+
+<body>
+  <h1>My ClickBall Game</h1>
+  <p>Just testing out my game</p>
+<script type="text/processing">
+
+
+int gameState;
+int x, y, Vx, Vy, radius;
+int score, highScore, lives;
+
+//SETUP
+void setup(){
+  size(650,650);
+  gameState=0;
+  radius=50;
+  x=300;
+  y=100;
+  Vx = 2;
+  Vy = 3;
+  score = 0;
+  highScore = 0;
+}
+
+
+//MAIN
+void draw(){
+    //black background
+  if(gameState==0){
+    background(0);
+    startScreen();
+  }
+  
+  else if (gameState==1){
+    //BEGIN GAME  
+    background(0);
+    ellipse(x , y, radius, radius);
+    update();
+    showScore();
+    checkLives();
+  }
+  
+  else if (gameState==2){
+    playAgain();
+  }
+}
+
+void showScore(){
+  textSize(25);
+  text("Score: " + score, width - 120, 30);
+  text("High: " + highScore, width - 120, 60);
+  text("Lives: " + lives, 20, 30);
+  if ( score > highScore) {
+    highScore = score;
+  }
+}
+
+
+void startScreen(){
+    textSize(44);
+    fill(255);  //white
+    text("Welcome to my first game!", 40, 100);
+    text("'ClickBall' ", 60, 200);
+    if(mouseX > 95 && mouseX < 395 && mouseY > 265 && mouseY < 310){
+      fill(0,255,0); //Green
+      if(mousePressed){
+        lives = 4;
+        gameState=1;
+      }
+    }
+    else{
+      fill(255,0,0);  //red
+    }
+    rect(95, 260, 300, 55, 15);
+    fill(255);
+    text("Click to start!", 100, 300);
+}
+
+void checkLives(){
+   if (lives < 1){
+     textSize(44);
+     gameState = 2;
+     stroke(155);
+     fill(255,0,0);
+     text("GAME OVER", 300, height - 200);
+   }
+}
+void update(){
+   x = x + Vx;
+   y = y + Vy;
+   if (x > width || x < 0)
+   {
+     Vx = -Vx;
+   }
+   
+   if (y > height || y < 0)
+   {
+     Vy = - Vy; 
+   }
+}
+
+
+
+
+void playAgain(){
+    if(mouseX > 35 && mouseX < 395 && mouseY > 265 && mouseY < 310){
+      fill(0,255,0); //Green
+      if(mousePressed){
+        lives = 4;
+        score = 0;
+        gameState=1;
+      }
+    }
+    else{
+      fill(255,0,0);  //red
+    }
+    rect(35, 230, 240, 55, 15);
+    fill(255);
+    text("Play again?", 42, 270);    
+}
+
+
+
+void mouseClicked()  {
+  if((abs(mouseX - x) < radius) && (abs(mouseY - y) < radius)){ 
+      score++; 
+  }
+  else
+  {
+    lives --;
+  }
+}
+
+</script>
+<canvas id="sketch" style="border: 1px solid black;"></canvas>
+</body>
+</html>
