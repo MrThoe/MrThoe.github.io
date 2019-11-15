@@ -1,0 +1,143 @@
+<!Doctype: HTML w/ Processing>
+
+<html>
+
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Processing Demo</title>
+      <script type="text/javascript" src="js/processing.js"></script>
+  </head>
+  
+  <body>
+    <h1>Flappy Bird</h1>
+    <p>Click <a href="https://www.youtube.com/watch?v=IIrGAvlNckw&list=PLAE4MzuQm3Gwj2QLcqpepbTuIuzi_18mS">here </a> for the tutorial!</p>
+    
+    <script type="text/processing">
+      /* FLAPPY BIRD IN PROCESSING
+       * This goes goes with the 6th video in my Flappy Bird Tutorial
+       * Author: Allen Thoe
+       * Date: 11/15/2019
+       * Language:  Processing (Version of Java)
+       * Download: https://processing.org/download/
+       */
+      PImage bg, kirby, topPipe, botPipe;  //Background, Player
+      int bgx, bgy, kx, ky, g, Vky;
+      int[] pipeX, pipeY; //DECLARE two arrays 
+      int gameState, score, highScore;
+      
+      //ONE TIME
+      void setup()
+      {
+        size(800,620);
+        bg = loadImage("./flappyImgs/bg.png");
+        kirby = loadImage("./flappyImgs/kirby.png");
+        botPipe = loadImage("./flappyImgs/botPipe.png");
+        topPipe = loadImage("./flappyImgs/topPipe.png");
+        kx = 100;
+        ky = 50;
+        g = 1; //Gravity == Speed of downward acceleration
+        pipeX = new int[5];  //[0,0,0,0]
+        pipeY = new int[pipeX.length];
+        //POPULATE THE ARRAY WITH VALUES
+        for(int i = 0; i < pipeX.length; i++)
+        {
+          pipeX[i] = width + 200*i;
+          pipeY[i] = (int)random(-350, 0);
+        } 
+        gameState = -1;
+      }
+      void draw()
+      {
+        if(gameState == -1)
+        {
+          startScreen(); 
+        }
+        else if(gameState==0)
+        {
+          setBg();
+          setPipes();
+          setKirby(); //PUTS KIRBY ON TOP -- Draws him last
+        }
+        else
+        {
+          endScreen();
+        }
+      }
+
+
+      void startScreen()
+      {
+        image(bg, 0,0);
+        image(kirby, 100, 100);
+        textSize(45);
+        text("Welcome to Flappy Bird!", 40, 100);
+        text("Click the mouse to begin...", 40, 200);
+        if(mousePressed)
+        {
+          ky = height/2;
+          gameState = 0;
+        }
+      }
+
+      void setBg()
+      {
+        image(bg, bgx, bgy);
+        image(bg, bgx + bg.width, bgy);
+        bgx-=1;
+        if(bgx < -bg.width)
+        {
+           bgx = 0; //RESET images to starting position 
+        }  
+      }
+      
+      void setPipes()
+      {
+        //Move the Pipes
+        for(int i = 0; i < pipeX.length; i++)
+        {
+         image(topPipe, pipeX[i], pipeY[i]);
+         image(botPipe, pipeX[i], pipeY[i] + 680);
+         pipeX[i]-= 2;
+         if(score > 10)
+         {
+           pipeX[i]-=1;  //Speed up when they reach 10 points
+         }
+         if(score > 20)
+         {
+           pipeX[i]-=1;  //Speed up again at 20 points  
+         }
+         if(pipeX[i] < -200)
+         {
+           pipeX[i] = width;  
+         }
+         
+         //Check for Collision
+         if(kx > (pipeX[i]-35) && kx < pipeX[i] + 92)
+         {
+           //End Game is not in SAFE ZONE
+           if(!(ky > pipeY[i] + 449 && ky < pipeY[i] + (449 + 231-49)))
+           {
+             fill(255, 0, 0, 200);
+             textSize(24);
+             rect(20, height - 223, 455, 32);
+             fill(0);
+             text("OH NO!!!! KIRBY RAN INTO A PIPE...", 20, height - 200);      
+             gameState = 1;
+           }
+           //Score if pass through pipe
+           else if (kx==pipeX[i] || kx == pipeX[i] + 1)
+           {
+             score+=1;  
+           }
+         }
+        }  
+      }
+      
+      
+      
+    </script>
+    <canvas id="sketch" style="border: 1px solid black;"></canvas>
+    
+  </body>
+  
+</html>
