@@ -243,6 +243,7 @@ footer{
 body .highlight, body .current a{
 	color:#C5B358;
 	font-weight: bold;
+	text-decoration: none;
 }
 body a:hover{
 	color:#cccccc;
