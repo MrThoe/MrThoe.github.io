@@ -2,17 +2,19 @@
 
 <html>
 
-  <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-      <title>Processing Demo</title>
-      <script type="text/javascript" src="js/processing.js"></script>
-  </head>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Processing Demo</title>
+    <script type="text/javascript" src="js/processing.js"></script>
+</head>
+
   
   <body>
     <h1>Flappy Bird</h1>
     <p>Click <a href="https://www.youtube.com/watch?v=IIrGAvlNckw&list=PLAE4MzuQm3Gwj2QLcqpepbTuIuzi_18mS">here </a> for the tutorial!</p>
     
     <script type="text/processing">
+    
       /* FLAPPY BIRD IN PROCESSING
        * This goes goes with the 6th video in my Flappy Bird Tutorial
        * Author: Allen Thoe
@@ -20,11 +22,15 @@
        * Language:  Processing (Version of Java)
        * Download: https://processing.org/download/
        */
-      PImage bg, kirby, kirbyBig, topPipe, botPipe;  //Background, Player
+       
+
+       
+      PImage bg, kirby, kirbyBig, topPipe, botPipe, start;  //Background, Player
       int bgx, bgy, kx, ky, g, Vky;
       int[] pipeX, pipeY; //DECLARE two arrays 
       int gameState, score, highScore;
       
+  
       //ONE TIME
       void setup()
       {
@@ -34,6 +40,7 @@
         botPipe = loadImage("./flappyImgs/botPipe.png");
         topPipe = loadImage("./flappyImgs/topPipe.png");
         kirbyBig = loadImage("./flappyImgs/kirbyBig.png");
+        start = loadImage("./flappyImgs/start.png");
         kx = 100;
         ky = 50;
         g = 1; //Gravity == Speed of downward acceleration
@@ -45,12 +52,13 @@
           pipeX[i] = width + 200*i;
           pipeY[i] = (int)random(-350, 0);
         } 
-        gameState = -1;
+        gameState = -1; 
       }
 
       //MAIN GAME LOOP
       void draw()
       {
+
         if(gameState == -1)
         {
           startScreen(); 
@@ -105,13 +113,8 @@
 
       void startScreen()
       {
-        image(bg, 0,0);
+        image(start, 0,0);
 
-        textSize(48);
-        fill(60,60,60);
-        text("Welcome to Flappy Bird!", 40, 100);
-        text("Click the mouse to begin...", 40, 210);
-        image(kirbyBig, 194, 95);        
         if(mousePressed)
         {
           ky = height/2;
@@ -119,7 +122,7 @@
         }
       }
       
-      
+     
       void setScore()
       {
         if(score>highScore)
@@ -134,7 +137,7 @@
         text("Score: " + score, width - 170, 40);  
         text("High:  " + highScore, width - 170, 80);   
       }
-      
+     
       void setPipes()
       {
         //Move the Pipes
@@ -155,7 +158,7 @@
          {
            pipeX[i] = width;  
          }
-         
+        
          //Check for Collision
          if(kx > (pipeX[i]-30) && kx < pipeX[i] + 86)
          {
@@ -174,8 +177,14 @@
            {
              score+=1;  
            }
+           else if(score > 10){
+             if(kx==pipeX[i] || kx == pipeX[i] + 1 || kx == pipeX[i] + 2)
+             {
+              score++;
+             }
+           }
          }
-        }  
+        }
       }
 
       void setKirby()
@@ -214,7 +223,6 @@
         }  
       }
 
-      
     </script>
     <canvas id="sketch" style="border: 1px solid black;"></canvas>
     
