@@ -1,0 +1,270 @@
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Tetris!</title>
+        <script type="text/javascript" src="js/processing.js"></script>
+    </head>
+    
+    <body>
+        <h1>  Welcome to Snake Game With Style!</h1>
+        <h2>  @Author: Allen Thoe </h2>
+        <h2>  Click mouse to start.  Use Arrows to move</h2>
+        <a href= "https://github.com/MrThoe/SnakeGame/tree/master"> See Code (Github) </a>
+        </br>
+        <hr>
+        <script type="text/processing">
+/*  Snake Game Finished with styling
+ *
+ * @Author: Allen Thoe       
+ * @Date: 1/2/2020
+ */
+ int score;
+ int numLines;
+ float w;
+ Apple[] apple;
+ Snake snake;
+ int gameState;
+ 
+ void setup(){
+    size(600,600);
+    numLines = 20;
+    w = width/numLines;
+    apple = new Apple[3];
+    for(int i = 0; i < apple.length; i++){
+      apple[i] = new Apple();
+    }
+    snake = new Snake();
+    frameRate(8);
+    gameState = 0;
+
+ }
+ 
+ void draw(){
+     if(gameState ==0){
+       background(0);
+       apple[1].display();
+       snake.display();
+       textSize(34);
+       text("Press Any Arrow Key To Play", 5, 100);
+       fill(0,0,255);
+       text("Press Any Arrow Key To Play", 3, 102);       
+     } else if(gameState == 5){
+     textSize(44);
+     background(105);
+     fill(0);
+     rect(5,5,width - 10, height - 10);
+     //drawGrid();
+     for(int i = 0; i < apple.length; i++){
+       apple[i].display();
+       if(apple[i].isEaten(snake)){
+         println("Num Num Num Num...");
+         score++;
+         apple[i] = new Apple();
+       }
+     }
+     snake.display();
+     snake.move();
+     if(snake.checkTail()){
+       fill(0,0,255);
+       text("YOU RAN INTO YOURSELF!", 18,202);       
+       fill(255,0,0);
+       text("YOU RAN INTO YOURSELF!", 20,200);
+       gameState = 1;
+     }
+     textSize(22);
+     fill(255);
+     text("Score: " + score, width - 110, height - 5);
+   }
+ }
+ 
+ void drawGrid(){
+    stroke(255,0,255);
+    for(int i = 0; i < numLines; i++){
+      line(0, i*w, width, i*w); //HORIZONTAL
+      line(i*w, 0, i*w, height);
+   }
+ }
+ 
+ void keyPressed(){
+    gameState = 5;
+    if(keyCode == LEFT && snake.dir != "RIGHT"){
+      snake.dir = "LEFT";
+    } else if(keyCode == RIGHT && snake.dir != "LEFT"){
+      snake.dir = "RIGHT";
+    } else if(keyCode == UP && snake.dir != "DOWN"){
+      snake.dir = "UP";
+    } else if(keyCode == DOWN && snake.dir != "UP"){
+      snake.dir = "DOWN";
+    }
+ }
+ 
+ void mousePressed(){
+     setup();
+ }
+ 
+ class Apple{
+  
+   int x, y;
+   
+   Apple(){
+      x = (int)random(numLines);
+      y = (int)random(numLines);
+   }
+   
+   void display(){
+      noStroke();
+      fill(0,255,0); //GREEN
+      rect(x*w, y*w, w, w, w/2);
+      stroke(129, 65, 15);
+      strokeWeight(2);
+      line(x*w+w/2, y*w+4, (x+1)*w, (y-.5)*w);      
+   }
+   
+   boolean isEaten(Snake s){
+      if(x == s.x.get(0) && y == s.y.get(0)){
+        s.x.add(0,x);  //.add(index, value)
+        s.y.add(0,y);
+        return true;
+      } else {
+        return false;
+      }
+   }
+  
+}
+class Snake{
+  
+   ArrayList<Integer> x, y;
+   String dir;  //DIRECTION HEAD IS MOVING
+   float r, g, b;
+   float snakeW;
+   float dx;
+   
+   Snake(){
+      x = new ArrayList();
+      y = new ArrayList();
+      x.add(5);
+      x.add(6);
+      y.add(10);
+      y.add(10);
+      dir = new String();
+      snakeW = w;
+   }
+  
+   //TODO: ADD STYLE
+   void display(){
+       //RED
+      
+      for(int i = 0; i < x.size(); i++){  //x and y are same size()
+          if(i%2 == 0){
+             b = 200; 
+          } else {
+             b = 0;
+          }
+          snakeW = i;
+          snakeW = map(snakeW, 0, x.size(), w+5, w/4); 
+          r =i;
+          r = map(r, 0, x.size(), 255, 100);
+          dx = (w - snakeW)/2;
+          if(i%2 == 0){
+             r = 0;
+             b = 255; 
+          } else {
+             b = 0;
+          }
+
+        fill(r,g,b);
+        stroke(100,0,0);
+        rect(x.get(i)*w+dx, y.get(i)*w+dx, snakeW, snakeW, 8);
+        if(i == 0){
+          //EYES
+           noStroke();
+           fill(255);
+           ellipse(x.get(0)*w + w/3, y.get(0)*w+w/3+1, w/4,w/4); 
+           ellipse(x.get(0)*w + 2*w/3, y.get(0)*w+w/3+1, w/4,w/4); 
+           fill(0);
+           ellipse(x.get(0)*w + w/3+1, y.get(0)*w+w/3+2, w/10,w/10); 
+           ellipse(x.get(0)*w + 2*w/3+1, y.get(0)*w+w/3+2, w/10,w/10);           
+        }
+      }
+   }
+   
+   void move(){
+     switch(dir){
+        case "UP":
+          if(y.get(0) > 0){
+            for(int i = x.size()-1; i > 0; i--){
+              x.set(i, x.get(i-1));  //.set(INDEX, VALUE)
+              y.set(i, y.get(i-1));
+            }
+            y.set(0, y.get(0)-1); //MOVE HEAD
+          } else { 
+            fill(255,0,0);
+            text("YOU HIT THE WALL!", 18, 202);
+            fill(0,0,255);
+            text("YOU HIT THE WALL!", 20, 200);
+            gameState = 1;
+          }
+          break;
+        case "DOWN":
+          if(y.get(0) < numLines - 1){
+            for(int i = x.size()-1; i > 0; i--){
+              x.set(i, x.get(i-1));  //.set(INDEX, VALUE)
+              y.set(i, y.get(i-1));
+            }
+            y.set(0, y.get(0)+1); //MOVE HEAD
+          } else { 
+            fill(255,0,0);
+            text("YOU HIT THE WALL!", 18, 202);
+            fill(0,0,255);
+            text("YOU HIT THE WALL!", 20, 200);;
+            gameState = 1;
+          }
+          break;
+        case "LEFT":
+          if(x.get(0) > 0){
+            for(int i = x.size()-1; i > 0; i--){
+              x.set(i, x.get(i-1));  //.set(INDEX, VALUE)
+              y.set(i, y.get(i-1));
+            }
+            x.set(0, x.get(0)-1); //MOVE HEAD
+          } else { 
+            fill(255,0,0);
+            text("YOU HIT THE WALL!", 18, 202);
+            fill(0,0,255);
+            text("YOU HIT THE WALL!", 20, 200);
+            gameState = 1;
+          }
+          break;
+        case "RIGHT":
+          if(x.get(0) < numLines - 1){
+            for(int i = x.size()-1; i > 0; i--){
+              x.set(i, x.get(i-1));  //.set(INDEX, VALUE)
+              y.set(i, y.get(i-1));
+            }
+            x.set(0, x.get(0)+1); //MOVE HEAD
+          } else { 
+            fill(255,0,0);
+            text("YOU HIT THE WALL!", 18, 202);
+            fill(0,0,255);
+            text("YOU HIT THE WALL!", 20, 200);
+            gameState = 1;
+          }
+          break;
+     }
+     
+   }
+   
+   boolean checkTail(){
+     for(int i = 1; i < x.size(); i++){
+        if(x.get(0) == x.get(i) && y.get(0) == y.get(i)){
+          return true;
+        }
+     }
+     return false;
+   }
+}
+      </script>
+        <canvas id="sketch" style="border: 1px solid black;"></canvas>
+    </body>
+</html>
