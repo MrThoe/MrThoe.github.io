@@ -33,7 +33,7 @@ void setup(){
   score=0;
   lives = 3;  
   rows = 4;
-  columns = 8;
+  columns = 4;
   makeLevel(columns, rows);  
   //song = new SoundFile(this, "song.mp3");
 }
@@ -62,9 +62,9 @@ void checkLevel(){
     text("Click anywhere to continue" , 260, height/2+182); 
     if(mousePressed){
       if(level%2==0){
-        rows *= 2;
+        rows += 2;
       } else {
-        columns *= 2;
+        columns += 2;
       }
       makeLevel(rows, columns);   
       ball.canMove = true;
