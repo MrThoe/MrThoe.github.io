@@ -47,29 +47,31 @@
        textSize(34);
        text("Press Any Arrow Key To Play", 5, 100);
        fill(0,0,255);
-       text("Press Any Arrow Key To Play", 3, 102);       
+       text("Press Any Arrow Key To Play", 3, 102);  
+       score = 0;
      } else if(gameState == 5){
-     textSize(44);
-     background(105);
-     fill(0);
-     rect(5,5,width - 10, height - 10);
-     //drawGrid();
-     for(int i = 0; i < apple.length; i++){
-       apple[i].display();
-       if(apple[i].isEaten(snake)){
-         println("Num Num Num Num...");
-         score++;
-         apple[i] = new Apple();
-       }
-     }
-     snake.display();
-     snake.move();
+         textSize(44);
+         background(105);
+         fill(0);
+         rect(5,5,width - 10, height - 10);
+         //drawGrid();
+         for(int i = 0; i < apple.length; i++){
+           apple[i].display();
+           if(apple[i].isEaten(snake)){
+             println("Num Num Num Num...");
+             score++;
+             apple[i] = new Apple();
+           }
+         }
+        snake.display();
+        snake.move();
      if(snake.checkTail()){
        fill(0,0,255);
        text("YOU RAN INTO YOURSELF!", 18,202);       
        fill(255,0,0);
        text("YOU RAN INTO YOURSELF!", 20,200);
        gameState = 1;
+       score = 0;
      }
      textSize(22);
      fill(255);
@@ -86,7 +88,10 @@
  }
  
  void keyPressed(){
-    gameState = 5;
+    if(gameState != 5){
+        gameState = 5;
+        score = 0;
+    }
     if(keyCode == LEFT && snake.dir != "RIGHT"){
       snake.dir = "LEFT";
     } else if(keyCode == RIGHT && snake.dir != "LEFT"){
