@@ -4,11 +4,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Breakout Retro!</title>
         <script type="text/javascript" src="js/processing.js"></script>
+        <link rel="stylesheet" href="./styles/styleGame.css">
     </head>
     
     <body>
-        <h1>  Welcome to Breakout Retro!</h1>
-        <h2>  @Author: Allen Thoe </h2>
         <script type="text/processing">
         
 /** BREAKOUT RETRO!  --> PART 6  Sound ; )
@@ -27,7 +26,7 @@ int rows, columns, score, lives, level;
 
 
 void setup(){
-  size(1000,700);
+  size(800,600);
   textSize(24);
   level = 0;
   score=0;
@@ -321,6 +320,20 @@ public class Paddle{
 }
 
         </script>
+      
         <canvas id="sketch" style="border: 1px solid black;"></canvas>
+        <h1>  Welcome to Breakout Retro!</h1>
+        <h2>  @Code Author: Allen Thoe </h2>
+        <hr>
+        <h3>  Music: <i class="blue">Summer</i> -- Courtesy of <a href="https://www.bensound.com/"> bensound.com </a></h3>        
+        <h3> Click Play for music with the game </h3>
+               <hr>
+        <audio controls>
+
+          <source src="./music/summer.mp3" type="audio/mpeg">
+          Your browser does not support the audio tag.
+        </audio>        
+
+
     </body>
 </html>

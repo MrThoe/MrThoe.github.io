@@ -1,0 +1,22 @@
+           a {
+             color: #0000FF;
+             text-decoration: none;
+           }
+           .blue {
+             color: #0000FF;
+           }
+           body {
+              background-color: #AAAAAA; 
+              font-family: helvetica;
+              margin-left: 60px;
+         
+           }
+
+           canvas{
+               float: right;
+               margin-right: 100px;
+           }
+           hr {
+            border: 10px solid green;
+            margin-right: 60%;
+            }

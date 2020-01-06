@@ -4,15 +4,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Snake With Style</title>
         <script type="text/javascript" src="js/processing.js"></script>
+        <link rel="stylesheet" href="./styles/styleGame.css">        
     </head>
     
     <body>
-        <h1>  Welcome to Snake Game With Style!</h1>
-        <h2>  @Author: Allen Thoe </h2>
-        <h2>  Click mouse to start.  Use Arrows to move</h2>
-        <a href= "https://github.com/MrThoe/SnakeGame/tree/master"> See Code (Github) </a>
-        </br>
-        <hr>
+        <audio controls>
+            <source src="./music/cute.mp3" type="audio/mpeg">
+        </audio>
         <script type="text/processing">
 /*  Snake Game Finished with styling
  *
@@ -37,6 +35,7 @@
     snake = new Snake();
     frameRate(8);
     gameState = 0;
+    score = 0;
 
  }
  
@@ -100,6 +99,7 @@
  }
  
  void mousePressed(){
+     score = 0;
      setup();
  }
  
@@ -265,6 +265,13 @@ class Snake{
    }
 }
       </script>
-        <canvas id="sketch" style="border: 1px solid black;"></canvas>
+        <canvas id="sketch" style="border: 1px solid black;"></canvas>    
+        <h1>  Welcome to Snake Game With Style!</h1>
+        <h2>  @Author: Allen Thoe </h2>
+        <h2>  Click mouse to start.  Use Arrows to move</h2>
+        <a href= "https://github.com/MrThoe/SnakeGame/tree/master"> See Code (Github) </a>
+        </br>
+        <hr>
+
     </body>
 </html>
