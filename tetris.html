@@ -4,6 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Tetris!</title>
         <script type="text/javascript" src="js/processing.js"></script>
+        <link rel="stylesheet" href="./styles/styleGame.css">        
     </head>
     
     <body>
@@ -328,7 +329,7 @@ Background bg;
 int gameState;
 
 void setup(){
-  size(720,720);  
+  size(600 , 600);  
   grid = new Grid();
   shape = new Shape();
   shape.isActive = true;
@@ -408,9 +409,16 @@ void keyReleased(){
 
         </script>
         <canvas id="sketch" style="border: 1px solid black;"></canvas>        
-         <h1>  Welcome to Tetris~!</h1>
-        <h2>  @Authors: Allen Thoe, Kenon Willis </h2>       
-        
+         <h1>  ~Welcome to Tetris~</h1>
+        <h3 style="float: center"> Use the Arrow keys to play </h3>
+        <h3>  Authors: Allen Thoe, Kenon Willis </h3>
+        <h3> Language: Processing (java) </h3>
 
+        <hr>
+        <h2><a href="https://github.com/MrThoe/tetris"> Check out our code Repo (Github) </a></h2>
+        <hr>
+        <h1> Complete Tutorial Available!</h1>
+        <h3> Build the game Tetris from start to finish in PROCESSING (java).  Complete tutorial begins below:</h3>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/deeP5lQ7MBY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>    
     </body>
 </html>
